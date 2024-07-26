@@ -5,9 +5,6 @@ from zenml import step
 from sklearn.preprocessing import LabelEncoder, StandardScaler, MinMaxScaler
 
 import joblib
-# Save encoders
-
-
 
 @step
 def clean_and_encode_data(df: pd.DataFrame, scale_method: str = 'standardize') -> Tuple[pd.DataFrame, pd.Series]:
@@ -32,11 +29,7 @@ def clean_and_encode_data(df: pd.DataFrame, scale_method: str = 'standardize') -
 
         # Encode the target column
         label_encoder_target = LabelEncoder()
-        df['class'] = label_encoder_target.fit_transform(df['class'])
-        logging.info(f"Encoded target column 'class' with labels: {label_encoder_target.classes_}")
 
-
-        joblib.dump(label_encoders, 'saved_model/label_encoders.pkl')
         joblib.dump(label_encoder_target, 'saved_model/label_encoder_target.pkl')
 
         # Handle missing values
@@ -65,6 +58,8 @@ def clean_and_encode_data(df: pd.DataFrame, scale_method: str = 'standardize') -
         
         # Convert to DataFrame and restore column names
         X = pd.DataFrame(X, columns=column_names)
+        
+        joblib.dump(label_encoders, 'saved_model/label_encoders.pkl')
 
         return X, y
     except Exception as e:
