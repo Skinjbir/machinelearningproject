@@ -19,7 +19,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.11.9'
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
@@ -29,10 +29,10 @@ jobs:
     - name: Initialize ZenML
       run: |
         zenml init
-        zenml orchestrator register local_orchestrator --flavor=local || true
-        zenml metadata-store register local_metadata_store --flavor=sqlite --database=metadata.db || true
-        zenml artifact-store register local_artifact_store --flavor=local --path=./artifacts || true
-        zenml stack register local_stack -m local_metadata_store -a local_artifact_store -o local_orchestrator || true
+        zenml orchestrator register local_orchestrator --flavor=local
+        zenml metadata register local_metadata_store --flavor=sqlite --database=metadata.db
+        zenml artifact-store register local_artifact_store --flavor=local --path=./artifacts
+        zenml stack register local_stack -m local_metadata_store -a local_artifact_store -o local_orchestrator
         zenml stack set local_stack
 
     - name: Run ZenML pipeline
